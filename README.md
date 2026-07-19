@@ -487,3 +487,68 @@ Em resumo, enquanto o Docker oferece uma abordagem automatizada que garante unic
 - Cada instrução cria uma nova camada na imagem, quando aplicável.
 
 As instruções do Dockerfile tem a sintaxe `INSTRUÇÃO argumentos`. As instruções podem até ser escritas em minúsculo (o docker build vai entender), mas o padrão é que as instruções sejam escritas com letras maiúsculas.
+
+## Cmd Vs Entrypoint
+### CMD
+Define o comando padrão executado quando o container é iniciado. Apenas o último CMD é considerado. 
+
+Temos duas formas para o CMD: `shell` ou `exec`.
+```sh
+# forma exec
+CMD ["python", "app.py"]
+# forma shell
+CMD python app.py
+```
+
+O CMD só entra em cena quando executamos o comando `docker run`.
+
+Ao rodar o container, você pode substituir o CMD usado:
+```sh
+# Note que o bash é o executável que substitui o CMD definido.
+docker run minha-imagem bash
+```
+
+Vamos exemplificar com uma imagem Python: 
+```sh
+docker run -d python:alpine
+# f8a2c7ceddb661c3e70de69b4494fa340a9000e18d209d782e6fc519683420ed
+
+docker ps -a
+# CONTAINER ID   IMAGE           COMMAND                  CREATED          STATUS                      PORTS      NAMES
+# f8a2c7ceddb6   python:alpine   "python3"                16 seconds ago   Exited (0) 15 seconds ago              adoring_wilson
+```
+> Note que o resultado do `docker ps -a` também mostra o comando executado por cada container (no exemplo, o CMD foi `python3`).
+
+Vamos sobrescrever o comando padrão, trocando `python3` por apenas `python`:
+```sh
+docker run -d python:alpine python
+#4a97d447a0e50dc562ebaeab0bbf33a231950bf1d4480ba05797701fab9bb005
+
+docker ps -a
+# CONTAINER ID   IMAGE           COMMAND                  CREATED         STATUS                     PORTS      NAMES
+# 4a97d447a0e5   python:alpine   "python"                 8 seconds ago   Exited (0) 7 seconds ago              friendly_brown
+# f8a2c7ceddb6   python:alpine   "python3"                2 minutes ago   Exited (0) 2 minutes ago              adoring_wilson
+```
+### ENTRYPOINT
+Configura o executável principal do container. Argumentos passados via `docker run` são anexados ao ENTRYPOINT (na forma exec).
+
+Temos duas formas para o ENTRYPOINT: `shell` ou `exec`.
+```sh
+# forma exec
+ENTRYPOINT ["python", "app.py"]
+# forma shell
+ENTRYPOINT python app.py
+```
+
+É possível combinar ENTRYPOINT com CMD, sendo que o ENTRYPOINT será o executável obrigatório, enquanto o CMD vai conter os parâmetros para o ENTRYPOINT:
+
+```sh
+# Dockerfile de minha-imagem:
+ENTRYPOINT ["python"]
+CMD ["app.py"]
+```
+```sh
+# Execução da imagem minha-imagem:
+docker run minha-imagem
+# Resultado = python app.py
+```
