@@ -734,3 +734,20 @@ docker ps -a
 ```
 > Veja que, na coluna COMMAND, o valor do ENTRYPOINT do Dockerfile sempre foi prefixado ao comando CMD executado.
  
+## Para saber mais: camadas em imagens docker
+### Entendendo as camadas
+Durante o processo de build, o Docker cria uma imagem composta por várias camadas empilhadas. Cada instrução do Dockerfile (como FROM, COPY e RUN) gera uma camada nova. Esse mecanismo permite que alterações em partes específicas do Dockerfile não forcem a recompilação total da imagem, já que as camadas inalteradas podem ser reutilizadas a partir do cache.
+
+### Funcionamento interno
+Quando um comando é executado durante o build, o Docker registra as alterações realizadas no sistema de arquivos da imagem. Essas alterações, por exemplo, incluir a cópia de um arquivo ou a instalação de um pacote, são salvas em uma camada separada. Ao final do build, a imagem final é a junção de todas essas camadas. Assim, se apenas um comando modificar algum arquivo, somente a camada correspondente será alterada, mantendo as demais inalteradas.
+
+### Vantagens do uso de camadas
+Uma das principais vantagens é a eficiência proporcionada pelo cache. No momento em que o Docker detecta que uma camada não sofreu alterações, ele a reutiliza ao invés de reconstruí-la. Isso acelera o processo de build e diminui o consumo de recursos. Outra vantagem é a facilidade para versionar e distribuir imagens, já que cada camada é identificada de forma única, permitindo comparações e rastreamento de mudanças.
+
+### Considerações sobre otimização
+Para tirar máximo proveito do cache, recomenda-se:
+
+- Organizar o Dockerfile de forma que as instruções menos voláteis fiquem no início, assegurando que as camadas posteriores possam ser reutilizadas se as instruções anteriores não mudarem.
+- Evitar comandos que alterem dados ou variem sua saída de forma imprevisível, pois isso gera invalidação do cache e recompilação desnecessária.
+
+Esses cuidados ajudam a reduzir o tempo de build e melhoram a performance durante o desenvolvimento e a integração contínua.
