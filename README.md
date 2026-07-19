@@ -751,3 +751,37 @@ Para tirar máximo proveito do cache, recomenda-se:
 - Evitar comandos que alterem dados ou variem sua saída de forma imprevisível, pois isso gera invalidação do cache e recompilação desnecessária.
 
 Esses cuidados ajudam a reduzir o tempo de build e melhoram a performance durante o desenvolvimento e a integração contínua.
+
+# Persistencia e Volumes no Docker
+## Criação e Gerenciamento de Volumes
+Sintaxe da criação de um volume:
+```sh
+docker volume create NOME_VOLUME
+```
+
+Volumes podem ser listados e inspecionados:
+```sh
+docker volume ls
+docker volume inspect cd 
+# [
+#     {
+#         "CreatedAt": "2026-03-25T22:19:26Z",
+#         "Driver": "local",
+#         "Labels": null,
+#         "Mountpoint": "/var/lib/docker/volumes/cd/_data",
+#         "Name": "cd",
+#         "Options": null,
+#         "Scope": "local"
+#     }
+# ]
+```
+
+Remoção de volumes:
+```sh
+docker volume rm NOME_VOLUME
+```
+
+Há três tipos de mount usados com o comando `docker run --mount`:
+1. **volume:** `docker run --mount type=volume,src=<nome-volume>,dst=<caminho-container>`
+2. **bind:** `docker run --mount type=bind,src=<caminho-host>,dst=<caminho-container>`
+3. **tmpfs:** `docker run --mount type=tmpfs,dst=<caminho-container>`
