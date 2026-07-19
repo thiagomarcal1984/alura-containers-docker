@@ -641,3 +641,96 @@ WORKDIR /app
 COPY app.py .
 RUN python app.py
 ```
+
+## Cmd Vs Entrypoint (Prática)
+### Criando uma imagem contendo apenas um CMD
+Vamos construir uma imagem a partir do seguinte Dockerfile:
+```sh
+FROM python:alpine
+WORKDIR /app
+COPY app.py .
+CMD ["python", "app.py"]
+```
+
+O arquivo `app.py` vai conter apenas o comando `print('Olá, mundo!')`.
+
+Terminado o Dockerfile, vamos construir uma imagem cuja tag será `app-py`:
+```sh
+docker build -t app-py -f Dockerfile .
+```
+> A flag `-f` é opcional caso o Dockerfile tenha o nome `Dockerfile`.
+
+Criada a image, nós a executamos:
+```sh
+docker run app-py
+# Resultado: 
+# Olá, mundo!
+```
+
+Vamos ver a lista de containers:
+```sh
+docker ps -a
+# CONTAINER ID   IMAGE         COMMAND                  CREATED         STATUS                     PORTS      NAMES
+# 4a334ee02efd   app-py        "python app.py"          3 seconds ago   Exited (0) 2 seconds ago              kind_bardeen
+```
+
+### Sobrescrevendo o CMD do Dockerfile
+Vamos acrescentar ao container o arquivo `app2.py`, cujo conteúdo será apenas o comando `print('Rodando aplicação 2.')`.
+
+O Dockerfile vai ter a seguinte configuração:
+```sh
+FROM python:alpine
+WORKDIR /app
+COPY app.py .
+COPY app2.py .
+CMD ["python", "app.py"]
+```
+
+Agora, vamos repetir o processo de build:
+```sh
+docker build -t app-py .
+```
+
+Vamos sobrescrever o CMD principal:
+```sh
+docker run app-py               
+# Olá, mundo!
+
+docker run app-py python app2.py
+# Rodando aplicação 2.
+
+docker ps -a
+# CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS                      PORTS      NAMES
+# dad240e68ee1   app-py         "python app2.py"         6 seconds ago    Exited (0) 4 seconds ago               adoring_dubinsky
+# ae3333b109a5   app-py         "python app.py"          28 seconds ago   Exited (0) 26 seconds ago              vigilant_rosalind
+```
+> Veja a coluna COMMAND: uma executa `python app.py` e outra executa `python app2.py`.
+
+### Usando o ENTRYPOINT
+O Dockerfile vai ter a seguinte configuração para forçar o uso do ENTRYPOINT `python`:
+```sh
+FROM python:alpine
+WORKDIR /app
+COPY app.py .
+COPY app2.py .
+ENTRYPOINT ["python"]
+CMD ["app.py"]
+```
+
+Agora, vamos repetir o processo de build e sobrescrever o CMD principal:
+```sh
+docker build -t app-py .
+
+docker run app-py
+# Olá, mundo!
+
+docker run app-py app2.py
+# Rodando aplicação 2.
+
+docker ps -a
+# CONTAINER ID   IMAGE         COMMAND                  CREATED          STATUS                      PORTS      NAMES
+# 5937ecaec55a   app-py        "python app2.py"         17 seconds ago   Exited (0) 16 seconds ago              compassionate_tesla
+# 229ec6c0b395   app-py        "python app.py"          25 seconds ago   Exited (0) 23 seconds ago              boring_moser
+```
+> Veja que, na coluna COMMAND, o valor do ENTRYPOINT do Dockerfile sempre foi prefixado ao comando CMD executado.
+ 
