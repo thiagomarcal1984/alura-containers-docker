@@ -210,3 +210,31 @@ Este comando utiliza o RunC para iniciar um contêiner com o identificador defin
 
 ### Impacto na Padronização
 A consolidação do RunC representou um marco na evolução dos contêineres. Ao oferecer uma camada nativa e padronizada para a execução dos contêineres, ele contribuiu para que desenvolvedores e profissionais de DevOps pudessem contar com um ambiente confiável e consistente, independentemente da plataforma ou da ferramenta utilizada anteriormente. Assim, a transição do LibContainer para o RunC facilitou a integração entre ferramentas, acelerou o desenvolvimento de novas soluções e reforçou a confiança na tecnologia de contêineres para ambientes de produção.
+
+# Comandos e Ciclo de Vida
+## Ciclo de vida de um container
+Containers são processos. Cada container roda um processo principal, e se esse processo morre, o container morre também.
+
+Os containers foram feitos para morrer. O CV de um container é semelhanteao CV de um processo. 
+
+Os estados dos processos são:
+- created;
+- running;
+- paused;
+- stopped; e
+- removed.
+
+O estados principais dos container são:
+- **created:** container foi criado, mas o processo principal ainda não foi iniciado;
+- **running:** processo principal do container está ativo;
+- **paused:** container está congelado (suspende os processos);
+- **restarting:** container terminou, mas existe uma política de restart configurada; 
+- **exited:** o processo principal terminou, o container ainda existe, mas não está executando; e 
+- **dead:** container tentou ser removido, mas o docker não conseguiu finalizar completamente (é raro).
+
+### Create vs Run
+- `docker create` apenas cria;
+- `docker run` cria e inicia o container (create + start).
+
+### Remoção
+Um container parado continua existindo. A remoção do container precisa ser explícita, com o comando `docker rm`.
