@@ -238,3 +238,34 @@ O estados principais dos container são:
 
 ### Remoção
 Um container parado continua existindo. A remoção do container precisa ser explícita, com o comando `docker rm`.
+
+## Comandos básicos do docker cli
+O Docker CLI é a interface de linha de comando do Docker usada para conversar com o Docker Daemon.
+
+A estrutura do comando do Docker CLI seria:
+```bash
+docker [objeto] [acao]
+```
+> Exemplos:
+> ```bash
+> docker container ls
+> docker image ls
+> docker volume ls
+> ```
+
+Quando executamos, por exemplo, o comando `docker run hello-world`, o Docker:
+- procura a imagem localmente;
+- se não houver, baixa do Registry (Docker Hub);
+- cria o container;
+- executa o processo e destrói o container após o seu fim.
+
+Após a execução do container `hello-world`, podemos ver os containers **em execução** com o comando:
+```sh
+docker container ls
+```
+
+Para mostrar todos os comandos, acrescente a flag `-a` ou `--all`:
+```sh
+docker container ls -a
+```
+> O comando `docker ps` é um alias para `docker container list` ou `docker container ls`.
