@@ -161,3 +161,29 @@ O Docker Engine é o mecanismo principal do Docker e roda nativamente no Linux (
 O Docker Desktop foi criado principalmente para Windows e MacOS e é composto do Docker Engine + CLI. Ele cria uma VM para esses sistemas que não tem kernel Linux.
 
 No Linux, você não vai precisar do Docker Desktop, basta instalar o Docker Engine direto. Você pode usar o Docker Desktop se quiser simplificar a experiência.
+
+## Diferenças entre containers e máquinas virtuais
+
+### Estrutura do Sistema operacional
+Sistema operacional é dividido em:
+- **Kernel Space:** controla hardware e recursos (CPU, memória, disco, rede);
+- **User Space:** é onde rodam aplicações e serviços.
+
+### Como funciona uma máquina virtual (VM)
+- Virtualiza o hardware físico;
+- Cada VM tem seu próprio sistema operacional;
+- Cada VM possui kernel e user space próprios.
+
+### Como funciona um container
+- Não virtualiza hardware;
+- Compartilha o kernel do host;
+- Isola apenas o user space das aplicações.
+
+### Compatibilidade entre containers
+- Containers compartilham o kernel do SO do host;
+- O tipo de container precisa ser compatível com o kernel disponível (seja ele Windows ou Linux).
+
+### Rodando containers Linux no Windows
+- O Windows não eecuta containers Linux diretamente;
+- Uma máquina virtual Linux leve é criada nos bastidores (WSL);
+- Essa VM fornece o kernel Linux necessário e os containers rodam nessa VM.
