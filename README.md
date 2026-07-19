@@ -269,3 +269,169 @@ Para mostrar todos os comandos, acrescente a flag `-a` ou `--all`:
 docker container ls -a
 ```
 > O comando `docker ps` é um alias para `docker container list` ou `docker container ls`.
+
+## Gerenciamento de containers I
+### Criando o container
+Vamos começar criando um container nginx: 
+
+```sh
+docker create nginx
+# Ou você pode executar:
+# docker container create nginx
+```
+
+Depois de criado o container, vamos exibir a lista de containers:
+```sh
+docker ps -a
+```
+
+Resultado:
+```
+CONTAINER ID   IMAGE         COMMAND                  CREATED          STATUS         PORTS      NAMES
+6378801fd8cd   nginx         "/docker-entrypoint.…"   33 seconds ago   Created                   priceless_liskov
+# Resultado omitido.
+```
+
+### Informações do cliente e servidor do Docker
+O comando `docker info` traz a seguinte saída:
+```
+Client:
+ Version:    29.5.3
+ Context:    desktop-linux
+ Debug Mode: false
+ Plugins:
+  ### Resultado omitido.
+
+Server:
+ Containers: 2
+  Running: 1
+  Paused: 0
+  Stopped: 1
+ Images: 20
+ ### Restante do resultado omitido.
+ ```
+ Note que nele são mostrados os containers existentes e seus status (running, paused e stopped).
+
+### Iniciando um container parado do Docker
+Para iniciar o container, use: 
+```sh
+docker container start 6378801fd8cd
+# Ou você pode usar a sintaxe mais breve: 
+# docker start 6378801fd8cd
+```
+
+### Pausando (e despausando) um container em execução
+Para pausar o container (o processo continuará ativo), use: 
+```sh
+docker container pause priceless_liskov
+# Ou você pode usar a sintaxe mais breve: 
+# docker pause priceless_liskov
+```
+Vamos listar os containers para ver o status do container `priceless_liskov`:
+```sh
+docker ps
+```
+Resultado:
+```
+CONTAINER ID   IMAGE         COMMAND                  CREATED          STATUS                   PORTS      NAMES
+6378801fd8cd   nginx         "/docker-entrypoint.…"   31 minutes ago   Up 52 seconds (Paused)   80/tcp     priceless_liskov
+```
+> Note o status `Up` e o complemento `Paused` entre parenteses.
+
+Para "despausar" o container, use `docker container unpause nome_container` ou a versão resumida `docker unpause priceless_liskov`.
+
+### Parando um container
+Para parar o container (e o seu respectivo processo), use: 
+```sh
+docker container stop priceless_liskov
+# Ou você pode usar a sintaxe mais breve: 
+# docker stop priceless_liskov
+```
+
+Listando todos os containers para mostrar o status deles: 
+```sh
+docker ps -a
+```
+Resultado:
+```
+CONTAINER ID   IMAGE         COMMAND                  CREATED          STATUS                     PORTS      NAMES
+6378801fd8cd   nginx         "/docker-entrypoint.…"   39 minutes ago   Exited (0) 2 seconds ago              priceless_liskov
+```
+> Note o status `Exited`.
+
+### Atribuindo nomes aos containers ao criá-los
+Forneça a flag `--name` para definir o nome do container ao criá-lo:
+```sh
+docker container create --name alura nginx
+# Ou você pode usar a sintaxe mais breve: 
+# docker create --name alura nginx
+```
+Listando todos os containers para mostrar o status deles: 
+```sh
+docker ps -a
+```
+Resultado:
+```
+CONTAINER ID   IMAGE         COMMAND                  CREATED          STATUS                     PORTS      NAMES
+196f693f83c8   nginx         "/docker-entrypoint.…"   6 seconds ago    Created                               alura
+6378801fd8cd   nginx         "/docker-entrypoint.…"   44 minutes ago   Exited (0) 5 minutes ago              priceless_liskov
+```
+
+### Reiniciando um container
+Para reiniciar um container (stop + start), execute o comando:
+```sh
+docker container restart alura
+# Ou você pode usar a sintaxe mais breve: 
+# docker restart alura
+```
+### Rodando um container
+Para rodar um container (create + start), use o comando: 
+```sh
+docker container run --name container-run nginx
+# Ou você pode usar a sintaxe mais breve: 
+# docker run --name container-run nginx
+```
+O resultado é a execução do processo do container, mas também o travamento do terminal.  É necessário usar o comando <kbd>Ctrl</kbd> + <kbd>c</kbd> para parar o processo (e liberar o terminal).
+
+Executando o `docker ps -a`, você verá o container `container-run` com o status `Exited`:
+```
+CONTAINER ID   IMAGE         COMMAND                  CREATED          STATUS                      PORTS      NAMES
+478953f44f82   nginx         "/docker-entrypoint.…"   5 minutes ago    Exited (0) 48 seconds ago              container-run
+```
+
+### Removendo um container
+Para remover um container, use o comando:
+```sh
+docker container rm container-run
+# Ou você pode usar a sintaxe mais breve: 
+# docker rm container-run
+```
+Somente containers com o status de `Exited` podem ser removidos. Se executarmos o comando `docker rm alura`, teremos como resultado:
+```
+Error response from daemon: cannot remove container "alura": container is running: stop the container before removing or force remove
+```
+
+Para forçar a remoção, use a flag `-f`:
+```sh
+docker rm -f alura
+```
+
+Você pode remover mais de um container por vez:
+
+```sh
+
+docker create nginx
+# 96d7230f5b8510a4c420d8ff7a7019d71b2ee46ccc99fec21254208140cbd08a
+
+docker create nginx
+# c51fce18709c4e176e2b66c9f48805c193dfc20b31825d65b532bb9e9000810f
+
+docker ps -a
+# CONTAINER ID   IMAGE         COMMAND                  CREATED             STATUS                      PORTS      NAMES
+# c51fce18709c   nginx         "/docker-entrypoint.…"   12 seconds ago      Created                                competent_allen
+# 96d7230f5b85   nginx         "/docker-entrypoint.…"   14 seconds ago      Created                                sleepy_jemison
+
+docker rm c51fce18709c 96d7230f5b85
+# c51fce18709c
+# 96d7230f5b85
+```
