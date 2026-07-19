@@ -102,3 +102,42 @@ Características dos containers:
 - Serverless usa containers por baixo;
 - Plataformas como serviço usam containers;
 - Isolamento virou *commodity*.
+
+## Arquitetura do docker
+- arquitetura baseada em **cliente + servidor**;
+- cliente Docker se comunica com daemon do Docker (dockerd).
+
+### Docker Client
+- Principal forma de interação com o Docker;
+- Envia instruções para o dockerd
+
+### Docker Daemon
+- Escuta requisições API do Docker;
+- Gerencia objetos Docker (imagens, containers, redes e volumes);
+- Pode rodar localmente ou em outro host.
+
+### Docker Registry
+- É onde você armazena imagens docker;
+- Docker Hub é o registry **padrão**;
+- Temos outras opções (exemplo: ECR, ACR)
+
+### Objetos Docker
+- Docker constrói, distribui e executa aplicações em containers;
+- Para fazer isso, ele manipula estruturas fundamentais;
+- Essas estruturas são chamadas de objetos Docker.
+
+#### Imagens
+- Modelo imutável para criar containers;
+- Contém sistema de arquivos, dependências, binários e metadados.
+
+#### Containers
+- Instância executável de uma imagem;
+- Processo isolado que usa namespaces e cgroups do kernel Linux.
+
+#### Volumes
+- Mecanismos de persistência de dados;
+- Permitem armazenar dados fora do ciclo de vida dos containers.
+
+#### Redes
+- Redes permitem que containers se comuniquem entre si e com o mundo externo;
+- O Docker cria redes virtuais e conecta containers a elas.
