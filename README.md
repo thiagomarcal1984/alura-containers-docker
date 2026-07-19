@@ -141,3 +141,23 @@ Características dos containers:
 #### Redes
 - Redes permitem que containers se comuniquem entre si e com o mundo externo;
 - O Docker cria redes virtuais e conecta containers a elas.
+
+## Instalação do Docker
+- Docker Engine (somente para Linux);
+- Docker Desktop (GUI com o Docker Engine).
+
+### Docker Engine
+- Docker CLI
+- API do Docker
+- Docker Daemon (dockerd)
+
+O Docker Engine é o mecanismo principal do Docker e roda nativamente no Linux (fala direto com o kernel).
+
+### Docker Desktop
+- Aplicativo amigável. Versão "tudo em um";
+- Fornece ambiente gráfico (GUI) e linha de comando para gerenciar containers Docker;
+- Integração com WSL, Kubernetes e Ferramentas integradas. 
+
+O Docker Desktop foi criado principalmente para Windows e MacOS e é composto do Docker Engine + CLI. Ele cria uma VM para esses sistemas que não tem kernel Linux.
+
+No Linux, você não vai precisar do Docker Desktop, basta instalar o Docker Engine direto. Você pode usar o Docker Desktop se quiser simplificar a experiência.
