@@ -435,3 +435,31 @@ docker rm c51fce18709c 96d7230f5b85
 # c51fce18709c
 # 96d7230f5b85
 ```
+
+## Gerenciamento de containers II
+### docker create
+Com este comando, o Docker cria a estrutura do container a partir de uma imagem. Ele monta o filesystem, configura a rede, namespace e cgroups. Esse comando não executa o processo principal ainda.
+
+### docker start
+Este comando inicia um container que já existe e está parado. Ele não cria um novo container, apenas inicia um container já criado. A configuração original é mantida.
+
+### docker run
+Este comando cria e inicia o container, executando o seu processo principal.
+
+### docker pause
+Após a execução deste comando, o container continua existindo e seus processos continuam na memória. O docker congela a execução usando cgroups (freeze cgroup). O processo fica suspenso, não finalizado.
+
+### docker unpause
+O container continua a execução de onde parou.
+
+### docker stop
+Envia um sinal de parada para o processo principal do container. O processo é finalizado. Isso permite que aplicações fechem conexões, salvem estado etc.
+
+### docker restart
+Equivale a `docker stop` + `docker start`. Usado quando o app trava, em testes de comportamento etc. Ele reinicia o processo isolado, não recria o container.
+
+### docker rm
+Remove containers parados. A imagem associada ao container não é removida. Para forçar a remoção de um container em execução, use a flag `-f`.
+
+### Mentalidade correta
+Containers são efêmeros: não os trate como servidores permanentes. Se um container der problema ou precisar de atualização, remova-o e suba outro.
