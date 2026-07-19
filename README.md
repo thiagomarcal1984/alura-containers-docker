@@ -463,3 +463,19 @@ Remove containers parados. A imagem associada ao container não é removida. Par
 
 ### Mentalidade correta
 Containers são efêmeros: não os trate como servidores permanentes. Se um container der problema ou precisar de atualização, remova-o e suba outro.
+
+## Para saber mais: como o Docker gera nomes aleatórios
+
+### Origem dos Nomes Aleatórios
+Quando não definimos um nome específico para um container, o Docker recorre a um gerador interno para fornecer um nome único e memorável. Esse mecanismo evita que haja colisão de nomes e facilita a identificação de containers sem que precisemos criar um sistema de nomenclatura manual.
+
+### O Algoritmo por Trás da Nomeação
+O algoritmo utiliza uma combinação de palavras pré-definidas. Geralmente, são selecionados dois termos – normalmente um adjetivo e um nome de cientista ou personalidade famosa – que, juntos, formam um nome único, como por exemplo, `inspiring_morse` ou `loving_einstein`. O uso dessa estratégia torna os nomes mais legíveis e até divertidos, em comparação a uma sequência aleatória de caracteres.
+
+### Implicações no Gerenciamento de Containers
+Utilizar nomes aleatórios pode ser útil para identificar containers em ambientes de teste ou desenvolvimento, onde o foco está na efemeridade dos processos. Por outro lado, em ambientes de produção ou onde há necessidade de monitoramento detalhado, adotar nomes personalizados pode facilitar a manutenção e o rastreamento, evitando a confusão gerada por nomes menos intuitivos.
+
+### Personalização Versus Automação
+Embora a nomeação automática agilize a criação de containers, há situações em que definir um nome manualmente – utilizando a flag `--name` – pode trazer vantagens. Por exemplo, nomes significativos ajudam a correlacionar um container a uma função específica de uma aplicação, melhorando a comunicação entre equipes e a compreensão do ambiente.
+
+Em resumo, enquanto o Docker oferece uma abordagem automatizada que garante unicidade e praticidade, a escolha por nomes personalizados pode tornar o gerenciamento em larga escala mais eficiente e intuitivo.
