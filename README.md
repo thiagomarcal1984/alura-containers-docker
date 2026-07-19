@@ -552,3 +552,92 @@ CMD ["app.py"]
 docker run minha-imagem
 # Resultado = python app.py
 ```
+
+## Instrucões Principais do Dockerfile
+### FROM
+Toda construção começa com a instrução FROM, que define a imagem base a partir da qual a nova imagem será construída. 
+
+É possível usar múltiplas instruções FROM para builds multi-stage.
+
+```sh
+FROM python:3.12
+```
+
+### RUN
+Executa comandos durante o build da imagem. Cada comando RUN cria uma nova camada no container.
+
+Temos duas formas para o RUN: `shell` ou `exec`.
+
+A sintaxe `shell` permite usar operadores, expansão de variáveis etc.
+```sh
+# forma shell
+RUN apk update && apk add curl
+```
+
+A sintaxe `exec` exige um array JSON válido. O comando é executado diretamente, sem passar por um shell.
+```sh
+# forma exec
+RUN ["apk", "add", "curl"]
+```
+
+Comparando as duas formas:
+```sh
+# forma exec
+RUN ["apk", "add", "curl"]
+# forma shell
+RUN apk add curl
+```
+
+### COPY
+Copia arquivos ou diretórios para o sistema de arquivos da imagem. Isso é realizado durante o processo de build.
+
+Sintaxe:
+```sh
+COPY <origem> <destino>
+# Exemplo: cópia do arquivo app.py do contexto atual 
+# para o diretório /app do container:
+COPY app.py /app/app.py
+```
+
+### ADD
+Adiciona arquivos ao sistema de arquivos da imagem durante o build. Se parece com o COPY, mas tem funcionalidades adicionais.
+
+Sintaxe:
+```sh
+ADD <origem> <destino>
+# Exemplo: cópia do arquivo app.py do contexto atual 
+# para o diretório /app do container:
+ADD app.py /app/app.py
+```
+
+Quando usar ADD?
+- Extração automática de arquivos tar locais;
+- Download de arquivos via URL.
+
+Exemplo:
+```sh
+ADD archive.tar.gz /app/
+# Resultado: o arquivo é extraído para /app/, 
+# não é apenas copiado como arquivo compactado.
+
+ADD https://example.com/file.txt /app/file.txt
+# Resultado: o Docker baixará o arquivo e o colocará no destino.
+```
+### WORKDIR
+Define o diretório de trabalho para as instruções que vêm depois dele no Dockerfile. Se o diretório não existir no container, ele é criado automaticamente.
+
+Sintaxe:
+```sh
+WORKDIR /app
+# Resultado: toda instrução que vier depois será 
+# executada dentro de /app.
+
+# Exemplo sem WORKDIR (note como é verboso):
+COPY app.py /app/app.py
+RUN cd /app && python app.py
+
+# Exemplo com WORKDIR (note como é conciso):
+WORKDIR /app
+COPY app.py .
+RUN python app.py
+```
