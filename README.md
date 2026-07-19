@@ -187,3 +187,26 @@ Sistema operacional é dividido em:
 - O Windows não eecuta containers Linux diretamente;
 - Uma máquina virtual Linux leve é criada nos bastidores (WSL);
 - Essa VM fornece o kernel Linux necessário e os containers rodam nessa VM.
+
+## Para saber mais: docker libcontainer e RunC
+
+### Contextualização Histórica
+Antes da consolidação dos padrões de contêineres, o Docker passava por uma fase de transição importante. Nesta etapa, surgiu o LibContainer, uma biblioteca de execução desenvolvida para oferecer maior controle e flexibilidade na gestão dos recursos do sistema. Ele permitia que os conceitos dos cgroups e namespaces, já disponíveis no kernel Linux, fossem integrados de forma mais direta e modulada, facilitando o isolamento e a limitação de recursos para cada contêiner.
+
+### Funcionamento do LibContainer
+A ideia por trás do LibContainer era abstrair o processo de manipulação de recursos do sistema, de modo que o gerenciamento dos contêineres ficasse mais padronizado e menos dependente de patches ou modificações diretas no kernel. Essa biblioteca fazia a ponte entre as funcionalidades nativas do Linux e a aplicação que gerenciava os contêineres, delegando automaticamente tarefas como a alocação de memória, o controle de CPU e a organização dos espaços de nomes. Esse design modular permitia um ambiente de contêiner mais resiliente e preparado para escalabilidade, mesmo em cenários onde os recursos eram compartilhados entre processos isolados.
+
+### A Transição para o RunC
+Com o avanço das tecnologias de contêiner, a necessidade por uma ferramenta mais padronizada e que seguisse as especificações de uma iniciativa global levou à evolução do LibContainer para o RunC. O RunC foi desenvolvido para funcionar como uma ferramenta de linha de comando leve, permitindo a execução dos contêineres conforme diretrizes definidas pela Open Container Initiative (OCI). Essa mudança não só melhorou a interoperabilidade entre diferentes plataformas, mas também incentivou a criação de um ecossistema mais robusto e colaborativo, já que outras soluções passaram a adotar o mesmo padrão de execução.
+
+### Exemplificando com Código
+Para ilustrar, veja um exemplo básico de como o RunC pode ser invocado para iniciar um contêiner:
+
+```bash 
+runc run my-container-id
+``` 
+
+Este comando utiliza o RunC para iniciar um contêiner com o identificador definido, demonstrando a simplicidade e a eficácia da ferramenta na prática.
+
+### Impacto na Padronização
+A consolidação do RunC representou um marco na evolução dos contêineres. Ao oferecer uma camada nativa e padronizada para a execução dos contêineres, ele contribuiu para que desenvolvedores e profissionais de DevOps pudessem contar com um ambiente confiável e consistente, independentemente da plataforma ou da ferramenta utilizada anteriormente. Assim, a transição do LibContainer para o RunC facilitou a integração entre ferramentas, acelerou o desenvolvimento de novas soluções e reforçou a confiança na tecnologia de contêineres para ambientes de produção.
