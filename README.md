@@ -479,3 +479,11 @@ Utilizar nomes aleatórios pode ser útil para identificar containers em ambient
 Embora a nomeação automática agilize a criação de containers, há situações em que definir um nome manualmente – utilizando a flag `--name` – pode trazer vantagens. Por exemplo, nomes significativos ajudam a correlacionar um container a uma função específica de uma aplicação, melhorando a comunicação entre equipes e a compreensão do ambiente.
 
 Em resumo, enquanto o Docker oferece uma abordagem automatizada que garante unicidade e praticidade, a escolha por nomes personalizados pode tornar o gerenciamento em larga escala mais eficiente e intuitivo.
+
+# Dockerfile Básico e Instruções
+## Anatomia de um Dockerfile
+- Um arquivo de texto que contém instruções e argumentos;
+- Sequência de instruções executadas em ordem para construir uma imagem Docker;
+- Cada instrução cria uma nova camada na imagem, quando aplicável.
+
+As instruções do Dockerfile tem a sintaxe `INSTRUÇÃO argumentos`. As instruções podem até ser escritas em minúsculo (o docker build vai entender), mas o padrão é que as instruções sejam escritas com letras maiúsculas.
