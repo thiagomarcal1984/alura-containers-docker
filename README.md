@@ -785,3 +785,32 @@ Há três tipos de mount usados com o comando `docker run --mount`:
 1. **volume:** `docker run --mount type=volume,src=<nome-volume>,dst=<caminho-container>`
 2. **bind:** `docker run --mount type=bind,src=<caminho-host>,dst=<caminho-container>`
 3. **tmpfs:** `docker run --mount type=tmpfs,dst=<caminho-container>`
+
+## Tipos de Volumes
+Um mount é um mapeamento de um recurso do host para um caminho dentro do container. Há três tipos de mounts:
+- Named volumes;
+- Bind mounts;
+- Tmpfs mounts.
+
+Qualquer que seja o tipo de volume, os dados são vistos da mesma forma pelo container: eles serão expostos como pasta ou arquivo individual dentro do filesystem do container.
+
+### Named volumes
+- Gerenciados pelo próprio Docker;
+- O Docker decide onde isso fica armazenado no host (você não precisa saber o caminho físico);
+- São desacoplados do ciclo de vida do container (eles permanecem mesmo que os containers sejam destruídos);
+- Ideais para banco de dados, dados persistentes de aplicações, etc;
+- Docker quem gerencia permissões, estrutura e isolamento.
+
+### Bind mounts
+- Mapeia um diretório específico do seu host dentro do container;
+- Você controla exatamente o caminho no host;
+- O container enxerga o diretório real do sistema;
+- Muito bom para desenvolvimento (edita o código no host e reflete direto no container);
+- Se o diretório do host desaparecer ou mudar permissões, afeta o container imediatamente.
+
+### Tmpfs mounts
+- Armazena arquivos diretamente na memória da máquina do host;
+- Dados **nunca** são gravados em disco;
+- Quando o container para, dados somem;
+- Quando host reinicia, dados desaparecem também;
+- Útil para dados temporários, informações sensíveis ou cache de alta performance.
