@@ -832,3 +832,44 @@ Qualquer que seja o tipo de volume, os dados são vistos da mesma forma pelo con
 **Persistência**: se remover o container, o volume continua existindo.
 
 **Desacoplamento**: o dado não pertence ao container, pertence ao volume.
+
+## Boas Práticas para Dados Persistentes
+### Use volumes
+- Volumes são gerenciados pelo Docker e ficam fora do ciclo de vida do container;
+- Você pode remover e recriar containers sem perder dados;
+- A camada de escrita é descartável, o volume não é.
+
+### Named volumes
+- Use named volumes ao invés de bind mounts;
+- Bind mounts dependem da estrutura do host e pode introduzir variações no ambiente;
+- Named volumes são mais previsíveis.
+
+### Não armazene dados persistentes na imagem
+- A imagem deve conter apenas código e dependências;
+- Dados de runtime (BD, por exemplo) devem estar em volumes externos;
+- Imagem é imutável por princípio.
+
+### Evite alterar arquivos padrão
+- Volumes geralmente ficam armazenados em `/var/lib/docker/volumes`;
+- Manipular diretamente esse diretório não é recomendado;
+- O Docker deve gerenciar o lifecycle
+
+### Monte como somente leitura sempre que possível
+- Nem todo dado persistente precisa ser gravável para todo mundo;
+- Se o container precisar ler, use o readonly/ro.
+
+### Evite lixo
+- Volumes continuam existindo quando o container morre;
+- Isso ocupa espaço na sua máquina;
+- Remova os volumes inutilizados.
+
+### Tmpfs para dados realmente temporários
+- Se o dado não deve ir para o disco, use o tmpfs (ex.: arquivos temporários, caches efêmeros, material sensível, etc.);
+- Os dados somem quando o container pára.
+
+### Faça backup dos volumes
+- Volumes não são protegidos contra falhas ou exclusão manual;
+- Monte container temporário e migre os dados;
+- Ou use ferramentas específicas de backup.
+
+> Containers devem poder morrer a qualquer momento sem que seus dados importantes desapareçam junto.
