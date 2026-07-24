@@ -814,3 +814,21 @@ Qualquer que seja o tipo de volume, os dados são vistos da mesma forma pelo con
 - Quando o container para, dados somem;
 - Quando host reinicia, dados desaparecem também;
 - Útil para dados temporários, informações sensíveis ou cache de alta performance.
+
+## Entendendo a Camada de Escrita dos Containers
+### Camada de container
+- A imagem é composta por camadas imutáveis (read-only);
+- O container recebe uma camada adiciona chamada camada de escrita (writable layer);
+- Os dados da camada do container **não persistem** quando o container é removido;
+
+### Volumes
+- É um diretório especial gerenciado pelo Docker e armazenado no host;
+- É montado dentro do container em um ponto do sistema de arquivos;
+- Não faz parte da camada de escrita do container;
+- Volumes vivem independentemente dos containers;
+- O Docker não remove volumes automaticamente;
+- Dados que precisam ser compartilhados entre containers.
+
+**Persistência**: se remover o container, o volume continua existindo.
+
+**Desacoplamento**: o dado não pertence ao container, pertence ao volume.
